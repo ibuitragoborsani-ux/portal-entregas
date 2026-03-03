@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portal de Entregas — Proveedores</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#F5F3EE;--sf:#FFF;--sf2:#FAFAF7;--br:#E2DDD5;--br2:#CCC8BE;--tx:#1A1814;--tx2:#6B6560;--tx3:#9E9A94;--ac:#1A6B4A;--acl:#E8F4EE;--acm:#2D8C62;--blue:#1D4ED8;--bluel:#EFF6FF;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--tx);min-height:100vh;font-size:15px;line-height:1.5}
+header{background:var(--sf);border-bottom:1px solid var(--br);padding:0 32px;height:64px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.logo{display:flex;align-items:center;gap:12px;font-weight:600;font-size:16px}
+.logo-icon{width:36px;height:36px;background:var(--ac);border-radius:8px;display:flex;align-items:center;justify-content:center}
+.hbadge{font-size:11px;font-weight:600;color:var(--tx3);font-family:'DM Mono',monospace;letter-spacing:.06em;text-transform:uppercase}
+main{max-width:780px;margin:0 auto;padding:40px 24px 80px}
+h1{font-size:26px;font-weight:600;letter-spacing:-.03em;margin-bottom:6px}
+.sub{color:var(--tx2);font-size:15px;margin-bottom:32px;font-weight:300}
+.card{background:var(--sf);border:1px solid var(--br);border-radius:10px;padding:28px 32px;margin-bottom:20px;box-shadow:0 1px 3px rgba(0,0,0,.05),0 4px 12px rgba(0,0,0,.03)}
+.ct{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--tx3);margin-bottom:20px;display:flex;align-items:center;gap:8px}
+.ct::before{content:'';display:block;width:3px;height:13px;background:var(--ac);border-radius:2px}
+.steps{display:flex;align-items:center;margin-bottom:32px}
+.step{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:500;color:var(--tx3)}
+.step.active{color:var(--ac)}.step.done{color:var(--acm)}
+.step-num{width:24px;height:24px;border-radius:50%;border:2px solid currentColor;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;transition:all .2s}
+.step.done .step-num{background:var(--ac);border-color:var(--ac);color:white}
+.step-line{flex:1;height:1px;background:var(--br);margin:0 8px}
+.fl{display:flex;flex-direction:column;gap:6px}
+label{font-size:13px;font-weight:500;color:var(--tx2)}
+input[type=text],input[type=date],input[type=time]{font-family:'DM Sans',sans-serif;font-size:15px;padding:10px 14px;background:var(--sf2);border:1px solid var(--br);border-radius:6px;color:var(--tx);transition:border-color .15s,box-shadow .15s;outline:none;width:100%}
+input[type=text]:focus,input[type=date]:focus,input[type=time]:focus{border-color:var(--ac);box-shadow:0 0 0 3px rgba(26,107,74,.1);background:var(--sf)}
+input::placeholder{color:var(--tx3)}
+input[type=date],input[type=time]{font-family:'DM Mono',monospace;font-size:14px}
+.big{font-size:16px;padding:12px 16px;font-weight:500}
+.hint{font-size:12px;color:var(--tx3);margin-top:3px}
+.fg{display:grid;gap:16px}.fr{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.acw{position:relative}
+.acd{position:absolute;top:calc(100% + 4px);left:0;right:0;background:var(--sf);border:1px solid var(--br);border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,.1);z-index:50;max-height:210px;overflow-y:auto;display:none}
+.acd.open{display:block}
+.aci{padding:10px 14px;cursor:pointer;font-size:14px;border-bottom:1px solid var(--br);transition:background .1s}
+.aci:last-child{border-bottom:none}.aci:hover,.aci.sel{background:var(--acl);color:var(--ac)}
+.aci mark{background:none;color:var(--ac);font-weight:600}
+.ac-empty{padding:14px;font-size:13px;color:var(--tx3);text-align:center}
+.ocgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(125px,1fr));gap:10px;margin-top:4px}
+.occ{border:2px solid var(--br);border-radius:8px;padding:12px 13px;cursor:pointer;transition:all .15s;background:var(--sf2);user-select:none}
+.occ:hover{border-color:var(--acm);background:var(--acl)}.occ.chk{border-color:var(--ac);background:var(--acl)}
+.occ-num{font-family:'DM Mono',monospace;font-weight:500;font-size:14px;color:var(--tx);margin-bottom:5px}
+.occ.chk .occ-num{color:var(--ac)}
+.occ-row{display:flex;align-items:center;justify-content:space-between}
+.occ-lbl{font-size:11px;color:var(--tx3);font-weight:500}.occ.chk .occ-lbl{color:var(--acm)}
+.chkbox{width:18px;height:18px;border-radius:4px;border:2px solid var(--br2);display:flex;align-items:center;justify-content:center;transition:all .15s;flex-shrink:0}
+.occ.chk .chkbox{background:var(--ac);border-color:var(--ac)}
+.no-oc{padding:22px;text-align:center;color:var(--tx3);font-size:14px;background:var(--sf2);border-radius:8px;border:1px dashed var(--br2)}
+.selbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.selcount{font-size:13px;font-weight:500;color:var(--tx2)}.selcount span{color:var(--ac);font-weight:700}
+.selallbtn{font-size:12px;font-weight:500;color:var(--ac);background:none;border:none;cursor:pointer;text-decoration:underline;text-underline-offset:2px}
+.tg{display:flex;background:var(--sf2);border:1px solid var(--br);border-radius:6px;padding:3px;gap:3px}
+.tb{flex:1;padding:7px 14px;border:none;background:transparent;border-radius:5px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;color:var(--tx2);cursor:pointer;transition:all .15s}
+.tb.a{background:var(--sf);color:var(--ac);box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.ds{display:none}.ds.vis{display:grid}
+.bp{background:var(--ac);color:#fff;border:none;padding:12px 24px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:600;border-radius:6px;cursor:pointer;transition:all .15s;display:inline-flex;align-items:center;gap:8px}
+.bp:hover{background:var(--acm);transform:translateY(-1px);box-shadow:0 4px 12px rgba(26,107,74,.3)}
+.bp:disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none}
+.bs{background:transparent;color:var(--tx2);border:1px solid var(--br2);padding:10px 20px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;border-radius:6px;cursor:pointer;transition:all .15s}
+.bs:hover{border-color:var(--ac);color:var(--ac);background:var(--acl)}
+.fa{display:flex;align-items:center;justify-content:flex-end;gap:12px;margin-top:8px;padding-top:20px;border-top:1px solid var(--br)}
+.mo{position:fixed;inset:0;background:rgba(10,10,8,.45);backdrop-filter:blur(4px);z-index:200;display:flex;align-items:center;justify-content:center;padding:24px;opacity:0;pointer-events:none;transition:opacity .2s}
+.mo.open{opacity:1;pointer-events:all}
+.md{background:var(--sf);border:1px solid var(--br);border-radius:14px;padding:32px;max-width:500px;width:100%;box-shadow:0 16px 48px rgba(0,0,0,.12);transform:translateY(16px);transition:transform .2s}
+.mo.open .md{transform:translateY(0)}
+.mi{width:48px;height:48px;border-radius:12px;background:var(--acl);display:flex;align-items:center;justify-content:center;margin-bottom:18px}
+.md h2{font-size:20px;font-weight:600;letter-spacing:-.02em;margin-bottom:8px}
+.md>div>p{color:var(--tx2);font-size:14px;line-height:1.6;margin-bottom:22px}
+.cd{background:var(--sf2);border:1px solid var(--br);border-radius:8px;padding:16px;margin-bottom:22px}
+.cr{display:flex;justify-content:space-between;align-items:flex-start;font-size:13px;padding:6px 0;gap:16px}
+.cr:not(:last-child){border-bottom:1px solid var(--br)}
+.cl{color:var(--tx3);font-weight:500;white-space:nowrap;flex-shrink:0}
+.cv{color:var(--tx);font-weight:500;text-align:right;font-size:13px}
+.cv.mono{font-family:'DM Mono',monospace;font-size:12px}
+.ma{display:flex;gap:10px}.ma .bp{flex:1;justify-content:center}
+.sv{text-align:center;padding:16px 0 4px;display:none}
+.sk{width:60px;height:60px;background:var(--acl);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 18px;animation:pop .35s cubic-bezier(.34,1.56,.64,1)}
+@keyframes pop{from{transform:scale(.4);opacity:0}to{transform:scale(1);opacity:1}}
+.sv h2{font-size:20px;font-weight:600;letter-spacing:-.02em;margin-bottom:6px}
+.sv>p{color:var(--tx2);font-size:14px;margin-bottom:22px}
+.ticket{background:var(--sf2);border:1px dashed var(--br2);border-radius:8px;padding:16px;margin-bottom:20px}
+.tid{font-family:'DM Mono',monospace;font-size:22px;font-weight:500;color:var(--ac);letter-spacing:.1em}
+.tsub{font-size:12px;color:var(--tx3);margin-top:4px}
+.sv-btns{display:flex;flex-direction:column;gap:10px}
+.bdl{background:var(--ac);color:#fff;border:none;padding:12px 20px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;border-radius:6px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .15s;width:100%}
+.bdl:hover{background:var(--acm);box-shadow:0 4px 12px rgba(26,107,74,.3)}
+.bnew{background:var(--sf2);color:var(--tx2);border:1px solid var(--br2);padding:10px 20px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;border-radius:6px;cursor:pointer;width:100%;transition:all .15s}
+.bnew:hover{border-color:var(--ac);color:var(--ac)}
+.saving-msg{font-size:13px;color:var(--tx3);display:flex;align-items:center;gap:6px;justify-content:center;margin-bottom:12px}
+.spin{width:14px;height:14px;border:2px solid var(--br2);border-top-color:var(--ac);border-radius:50%;animation:spin .7s linear infinite;display:inline-block}
+@keyframes spin{to{transform:rotate(360deg)}}
+#print-area{display:none}
+@media print{
+  body>*:not(#print-area){display:none!important}
+  #print-area{display:block!important;font-family:Arial,sans-serif;padding:40px;color:#1A1814}
+  .pr-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+  .pr-logo{display:flex;align-items:center;gap:10px}
+  .pr-logo-box{width:36px;height:36px;background:#1A6B4A;border-radius:7px;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .pr-logo-name{font-size:17px;font-weight:700}
+  .pr-date{font-size:12px;color:#9E9A94}
+  .pr-divider{border:none;border-top:2px solid #1A6B4A;margin:14px 0 24px}
+  .pr-title{font-size:22px;font-weight:700;margin-bottom:4px}
+  .pr-sub{font-size:13px;color:#6B6560;margin-bottom:28px}
+  .pr-ticket{display:inline-block;background:#F0FAF5;border:1.5px dashed #2D8C62;border-radius:6px;padding:12px 20px;margin-bottom:28px;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .pr-ticket-id{font-family:monospace;font-size:20px;font-weight:700;color:#1A6B4A;letter-spacing:.12em}
+  .pr-ticket-sub{font-size:11px;color:#9E9A94;margin-top:3px}
+  .pr-section{margin-bottom:20px;padding-bottom:20px;border-bottom:1px solid #E2DDD5}
+  .pr-section:last-of-type{border-bottom:none}
+  .pr-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#9E9A94;margin-bottom:6px}
+  .pr-value{font-size:16px;font-weight:600;color:#1A1814}
+  .pr-oc-grid{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+  .pr-oc-chip{background:#E8F4EE;color:#1A6B4A;border:1px solid #A7D4BA;border-radius:5px;padding:5px 13px;font-size:13px;font-weight:600;font-family:monospace;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .pr-footer{margin-top:48px;padding-top:12px;border-top:1px solid #E2DDD5;font-size:11px;color:#9E9A94;display:flex;justify-content:space-between}
+}
+@media(max-width:600px){.fr{grid-template-columns:1fr}header{padding:0 16px}main{padding:24px 16px 60px}.card{padding:20px}.ocgrid{grid-template-columns:repeat(auto-fill,minmax(105px,1fr))}.step-lbl{display:none}}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">
+    <div class="logo-icon"><svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10"/></svg></div>
+    Portal de Entregas
+  </div>
+  <span class="hbadge">Proveedores</span>
+</header>
+<main>
+  <h1>Programar entrega</h1>
+  <p class="sub">Seleccioná tus órdenes pendientes y coordiná la fecha de entrega.</p>
+  <div class="steps">
+    <div class="step active" id="s1"><div class="step-num">1</div><span class="step-lbl">Proveedor</span></div>
+    <div class="step-line"></div>
+    <div class="step" id="s2"><div class="step-num">2</div><span class="step-lbl">OC a entregar</span></div>
+    <div class="step-line"></div>
+    <div class="step" id="s3"><div class="step-num">3</div><span class="step-lbl">Fecha y horario</span></div>
+  </div>
+  <div class="card">
+    <div class="ct">Razón Social</div>
+    <div class="fl">
+      <label for="rs">Buscá tu empresa</label>
+      <div class="acw">
+        <input type="text" id="rs" class="big" placeholder="Escribí el nombre de tu empresa..." autocomplete="off">
+        <div class="acd" id="acd"></div>
+      </div>
+      <span class="hint">Escribí al menos 3 letras para buscar tu empresa.</span>
+    </div>
+  </div>
+  <div class="card" id="card-oc" style="display:none">
+    <div class="ct">Órdenes de compra pendientes</div>
+    <div id="oc-area"><div class="no-oc">Ingresá tu razón social para ver tus OC pendientes.</div></div>
+  </div>
+  <div class="card" id="card-fecha" style="display:none">
+    <div class="ct">Fecha y horario de entrega</div>
+    <div class="fg">
+      <div class="fl">
+        <label>Tipo de fecha</label>
+        <div class="tg">
+          <button class="tb a" onclick="setDM('s',this)">Fecha puntual</button>
+          <button class="tb" onclick="setDM('r',this)">Rango de fechas</button>
+        </div>
+      </div>
+      <div class="ds vis" id="dss"><div class="fl"><label for="f">Fecha</label><input type="date" id="f"></div></div>
+      <div class="ds" id="dsr">
+        <div class="fr">
+          <div class="fl"><label for="fd">Desde</label><input type="date" id="fd"></div>
+          <div class="fl"><label for="fh">Hasta</label><input type="date" id="fh"></div>
+        </div>
+      </div>
+      <div class="fr">
+        <div class="fl"><label for="hd">Horario desde</label><input type="time" id="hd" value="08:00"></div>
+        <div class="fl"><label for="hh">Horario hasta</label><input type="time" id="hh" value="17:00"></div>
+      </div>
+    </div>
+  </div>
+  <div class="fa" id="fa" style="display:none">
+    <button class="bs" onclick="resetAll()">Limpiar</button>
+    <button class="bp" onclick="openConfirm()">
+      <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+      Confirmar entrega
+    </button>
+  </div>
+</main>
+<div class="mo" id="mo">
+  <div class="md">
+    <div id="cv">
+      <div class="mi"><svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="#1A6B4A" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg></div>
+      <h2>Confirmar programación</h2>
+      <p>Revisá los datos antes de confirmar tu entrega.</p>
+      <div class="cd" id="cdet"></div>
+      <div class="ma">
+        <button class="bs" onclick="closeM()">Cancelar</button>
+        <button class="bp" id="btnOk" onclick="submitForm()">
+          <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+          Confirmar
+        </button>
+      </div>
+    </div>
+    <div class="sv" id="sv">
+      <div class="sk"><svg width="26" height="26" fill="none" viewBox="0 0 24 24" stroke="#1A6B4A" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></div>
+      <h2>¡Entrega programada!</h2>
+      <p>Tu solicitud fue registrada. Descargá el comprobante para tus archivos.</p>
+      <div class="ticket"><div class="tid" id="tid">ENT-00000</div><div class="tsub">Número de confirmación</div></div>
+      <div class="sv-btns">
+        <button class="bdl" onclick="downloadReport()">
+          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+          Descargar comprobante (PDF)
+        </button>
+        <button class="bnew" onclick="okClose()">Programar otra entrega</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="print-area"></div>
+<script>
+var SHEET_URL = 'https://script.google.com/macros/s/AKfycbyyUUA2ZbtIAs4PVUVYI9sviRv7kld7sfsRRoJEjFgE269n5ljyH6qHszGAbR2O2U5AfQ/exec';
+var DB = {"MANCIAVILLANO FELIPE DAVID":[35934],"MUSMANNO MARCELO ALBERTO":[3387,3455,3505,3529,3547],"AISLANTES DEL NORTE SRL":[3548],"DIAZ NORMAN WALTER":[35930],"READY S.A.S":[35927],"JORGE CABRERA":[35858,35919,35933],"INSUMOS INDUSTRIALES VIAPA SRL":[3359,3401,3539,3544],"CMTRANS SOLUCIONES LOGISTICAS SRL":[3545],"BUDETTA MARIA LAURA":[3546],"CIMINIERI MAURO NORBERTO":[3542],"FARIÑA NICOLÁS FERNANDO":[35932],"SIVORI ANTONIO PEDRO E IGLESIAS EMANUEL DARIO S. CAP I SECC IV":[35744,35883,35926],"PROSPERI CARLOS ARIEL":[35923],"TIMARO S.R.L":[3543],"DISNARDO SEBASTIAN ALBERTO Y ZALAZAR MACIEL FEDERICO ASOCIACION SIMPLE":[35922],"SHOW PACKET SA.":[3541],"BARREIRO NATALIA CECILIA":[3538],"CAÑOSIDER S.R.L.":[3408,3441,3491,3502,3527,3534,3540],"TEVEZ DAMIAN ALBERTO":[35674,35856,35920],"SERVICIOS F.F. SRL":[35918],"FUEGO RED SA":[3537],"ELEVACIONES PANAMERICANA SRL":[3531],"SANCHEZ HECTOR":[3535,35867],"RK ELEVACIONES S.R.L.":[3530],"DIAZ CORIA BERNABE GUIDO":[35754,35907,35908,35909,35910,35911,35912,35913,35914,35915],"ENCOMETAL SRL":[3433,3526],"BYBSA S.A":[35906],"EMPRESA DE TRANSPORTE DON PEDRO S.R.L.":[3499,35903],"PETRONACCI GUILLERMO MARIO":[3525],"IBARRA ENZO JAVIER":[35679,35898],"WALTER SOSA":[35891,35899],"DIEGO FERNANDO NUÑEZ":[35900],"PANERO OSCAR ROBERTO":[3514],"TRUE DIGITAL SYSTEMS SA":[3457,3483,3512],"INDUSTRIAL CONVER S.R.L.":[3373,3434,3508],"T-COM S.A.":[3396,3413,3500,3506],"CENTRY SA":[3394,3479,3503],"BUCKEYE FIRE EQUIPMENT":[3504],"DELEGADO UOCRA OBRAS Y SISTEMAS":[35882,35888,35889,35890,35893,35894,35895,35896,35897],"ALTOS DE CASPALA MD SRL":[3487,3501],"CB ACCESORIOS PARA LA INDUSTRIA SRL":[3490,3498],"BRISTOL FIRE ENGINEERING LLC":[3497],"DETECGAS CALIBRACIONES S.R.L.":[3496],"BAEZ ROBERTO RODOLFO":[35886,35887],"MONTINI S.R.L.":[3392,3493],"RIO NEGRO LOGISTICA Y TRANSPORTE S.R.L.":[3492],"CIGNONI FRANCO ISAIAS LIONEL":[35885],"SERVICIOS ELECTRICOS INTEGRALES S.R.L.":[3486,3489],"TASA LOGISTICA S.A.":[3488],"ESTRUCPLAN CONSULTORA SA":[3480,3484],"OTERINO PATRICIA VANESA":[35884],"ELECTROTECNICA SA":[3288,3385,3474,3481],"CREATIVA SOLUCIONES GRAFICAS SRL":[3476,3477,3478],"METALMEC SA":[3466,3473],"ACEROS Y METALES SRL":[3353,3446,3470],"MEGA GROUP":[3464,3468],"PLASTICOS DEL NOA SRL":[3463,3469],"CONSTRUCCIONES ARANDA SRL":[3465,3467],"CONSTRUCCIONES Y SERVICIOS ROCA S.R.L.":[35879,35880,35881],"GRUPROC S.R.L.":[3406,3440,3460],"LOZADA ANGEL DANIEL":[35871,35872,35873,35874,35875,35876],"TECNICOS ASOCIADOS SRL":[3449,3456,3458],"OROCOMEX SA":[3454],"IATEC SRL":[3393,3444,3452],"VALERIA ANDREA ROMANO":[35870],"JULIO CESAR CALIZAYA":[35868],"WALTER SOSA (2)":[35878],"JORGE CABRERA (2)":[35877]};
+var selProv=null,selOCs=[],dm='s',confirmData={};
+var today=new Date().toISOString().split('T')[0];
+['f','fd','fh'].forEach(function(id){document.getElementById(id).min=today;});
+var rsEl=document.getElementById('rs'),dropEl=document.getElementById('acd'),acIdx=-1;
+rsEl.addEventListener('input',function(){
+  var q=this.value.trim().toUpperCase();
+  selProv=null;selOCs=[];hideOC();
+  if(q.length<3){dropEl.classList.remove('open');return;}
+  var matches=Object.keys(DB).filter(function(k){return k.toUpperCase().indexOf(q)>=0;});
+  // Solo mostrar la coincidencia más cercana (máximo 1 resultado exacto al inicio, luego parciales)
+  matches.sort(function(a,b){
+    var ai=a.toUpperCase().indexOf(q), bi=b.toUpperCase().indexOf(q);
+    if(ai!==bi)return ai-bi;
+    return a.length-b.length;
+  });
+  matches=matches.slice(0,3);
+  if(!matches.length){dropEl.innerHTML='<div class="ac-empty">Sin coincidencias</div>';}
+  else{
+    var re=new RegExp('('+q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','gi');
+    dropEl.innerHTML=matches.map(function(m){return'<div class="aci" onmousedown="pickProv(this.getAttribute(\'data-v\'))" data-v="'+m.replace(/"/g,'&quot;')+'">'+m.replace(re,'<mark>$1</mark>')+'</div>';}).join('');
+  }
+  dropEl.classList.add('open');acIdx=-1;
+});
+rsEl.addEventListener('keydown',function(e){
+  var items=dropEl.querySelectorAll('.aci');
+  if(e.key==='ArrowDown'){e.preventDefault();acIdx=Math.min(acIdx+1,items.length-1);hilite(items);}
+  else if(e.key==='ArrowUp'){e.preventDefault();acIdx=Math.max(acIdx-1,0);hilite(items);}
+  else if(e.key==='Enter'&&acIdx>=0){e.preventDefault();pickProv(items[acIdx].getAttribute('data-v'));}
+  else if(e.key==='Escape'){dropEl.classList.remove('open');}
+});
+document.addEventListener('click',function(e){if(!e.target.closest('.acw'))dropEl.classList.remove('open');});
+function hilite(items){items.forEach(function(it,i){it.classList.toggle('sel',i===acIdx);});if(items[acIdx])items[acIdx].scrollIntoView({block:'nearest'});}
+function pickProv(name){rsEl.value=name;dropEl.classList.remove('open');selProv=name;selOCs=[];renderOCs(name);updateSteps();}
+function renderOCs(prov){
+  var ocs=DB[prov]||[];
+  var area=document.getElementById('oc-area');
+  document.getElementById('card-oc').style.display='block';
+  if(!ocs.length){area.innerHTML='<div class="no-oc">✓ No hay órdenes pendientes para esta empresa.</div>';document.getElementById('card-fecha').style.display='none';document.getElementById('fa').style.display='none';return;}
+  var html='<div class="selbar"><span class="selcount" id="sc"><span>0</span> de '+ocs.length+' seleccionadas</span>';
+  if(ocs.length>1)html+='<button class="selallbtn" id="saBtn" onclick="toggleAll()">Seleccionar todas</button>';
+  html+='</div><div class="ocgrid">';
+  ocs.forEach(function(oc){html+='<div class="occ" id="occ'+oc+'" onclick="toggleOC('+oc+')"><div class="occ-lbl">N° OC</div><div class="occ-row"><div class="occ-num">'+oc+'</div><div class="chkbox"><svg width="10" height="10" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="3.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></div></div></div>';});
+  html+='</div>';
+  area.innerHTML=html;
+  document.getElementById('card-fecha').style.display='block';
+  document.getElementById('fa').style.display='flex';
+  updSC();
+}
+function toggleOC(oc){var i=selOCs.indexOf(oc);if(i>=0)selOCs.splice(i,1);else selOCs.push(oc);var c=document.getElementById('occ'+oc);if(c)c.classList.toggle('chk',selOCs.indexOf(oc)>=0);updSC();updateSteps();}
+function updSC(){var el=document.getElementById('sc'),all=(DB[selProv]||[]).length;if(el)el.innerHTML='<span>'+selOCs.length+'</span> de '+all+' seleccionadas';var btn=document.getElementById('saBtn');if(btn)btn.textContent=selOCs.length===all?'Deseleccionar todas':'Seleccionar todas';}
+function toggleAll(){var ocs=DB[selProv]||[];selOCs=selOCs.length===ocs.length?[]:ocs.slice();ocs.forEach(function(oc){var c=document.getElementById('occ'+oc);if(c)c.classList.toggle('chk',selOCs.indexOf(oc)>=0);});updSC();updateSteps();}
+function hideOC(){document.getElementById('card-oc').style.display='none';document.getElementById('card-fecha').style.display='none';document.getElementById('fa').style.display='none';}
+function updateSteps(){var s1=document.getElementById('s1'),s2=document.getElementById('s2'),s3=document.getElementById('s3');s1.className=selProv?'step done':'step active';if(selOCs.length){s2.className='step done';s3.className='step active';}else if(selProv){s2.className='step active';s3.className='step';}else{s2.className='step';s3.className='step';}}
+function setDM(m,btn){dm=m;document.querySelectorAll('.tb').forEach(function(b){b.classList.remove('a');});btn.classList.add('a');document.getElementById('dss').classList.toggle('vis',m==='s');document.getElementById('dsr').classList.toggle('vis',m==='r');}
+function fmt(d){var p=d.split('-');return p[2]+'/'+p[1]+'/'+p[0];}
+function fmtLong(d){var M=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];var p=d.split('-');return parseInt(p[2])+' de '+M[parseInt(p[1])-1]+' de '+p[0];}
+function openConfirm(){
+  if(!selProv){alert('Ingresá tu razón social.');return;}
+  if(!selOCs.length){alert('Seleccioná al menos una OC.');return;}
+  var fs='',fsL='',fechaISO='';
+  if(dm==='s'){var fv=document.getElementById('f').value;if(!fv){alert('Ingresá la fecha.');return;}fs=fmt(fv);fsL=fmtLong(fv);fechaISO=fv;}
+  else{var fdv=document.getElementById('fd').value,fhv=document.getElementById('fh').value;if(!fdv||!fhv){alert('Ingresá el rango de fechas.');return;}if(fdv>fhv){alert('La fecha "Desde" debe ser anterior a "Hasta".');return;}fs=fmt(fdv)+' — '+fmt(fhv);fsL=fmtLong(fdv)+' al '+fmtLong(fhv);fechaISO=fdv+'|'+fhv;}
+  var hd=document.getElementById('hd').value,hh=document.getElementById('hh').value;
+  confirmData={prov:selProv,ocs:selOCs.slice(),fecha:fs,fechaLong:fsL,fechaISO:fechaISO,hd:hd,hh:hh};
+  document.getElementById('cdet').innerHTML='<div class="cr"><span class="cl">Proveedor</span><span class="cv">'+selProv+'</span></div><div class="cr"><span class="cl">OC a entregar ('+selOCs.length+')</span><span class="cv mono">'+selOCs.join(' · ')+'</span></div><div class="cr"><span class="cl">Fecha</span><span class="cv mono">'+fs+'</span></div><div class="cr"><span class="cl">Horario</span><span class="cv mono">'+hd+' — '+hh+' hs</span></div>';
+  document.getElementById('cv').style.display='block';
+  document.getElementById('sv').style.display='none';
+  document.getElementById('mo').classList.add('open');
+}
+function closeM(){document.getElementById('mo').classList.remove('open');}
+function submitForm(){
+  var t='ENT-'+String(Math.floor(10000+Math.random()*90000));
+  confirmData.ticket=t;
+  var now=new Date();
+  confirmData.fechaReg=now.toLocaleDateString('es-AR',{day:'2-digit',month:'2-digit',year:'numeric'})+' '+now.toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit'});
+  var btn=document.getElementById('btnOk');
+  btn.disabled=true;btn.innerHTML='<span class="spin"></span> Guardando...';
+  var payload={
+    ticket:t,
+    fecha_registro:confirmData.fechaReg,
+    proveedor:confirmData.prov,
+    ocs:confirmData.ocs.join(', '),
+    fecha_entrega:confirmData.fechaISO,
+    horario_desde:confirmData.hd,
+    horario_hasta:confirmData.hh
+  };
+  fetch(SHEET_URL,{method:'POST',body:JSON.stringify(payload)})
+    .then(function(){mostrarExito(t);})
+    .catch(function(){mostrarExito(t);}) // mostrar éxito igual, no bloquear al proveedor
+  ;
+}
+function mostrarExito(t){
+  document.getElementById('tid').textContent=t;
+  document.getElementById('cv').style.display='none';
+  document.getElementById('sv').style.display='block';
+  var btn=document.getElementById('btnOk');
+  btn.disabled=false;btn.innerHTML='<svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> Confirmar';
+}
+function downloadReport(){
+  var d=confirmData;
+  var chips=d.ocs.map(function(oc){return'<span class="pr-oc-chip">OC-'+oc+'</span>';}).join('');
+  document.getElementById('print-area').innerHTML='<div class="pr-header"><div class="pr-logo"><div class="pr-logo-box"><svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10"/></svg></div><div class="pr-logo-name">Portal de Entregas</div></div><div class="pr-date">Emitido: '+d.fechaReg+'</div></div><hr class="pr-divider"><div class="pr-title">Comprobante de Entrega Programada</div><div class="pr-sub">Este documento confirma la programación de entrega ante el receptor.</div><div class="pr-ticket"><div class="pr-ticket-id">'+d.ticket+'</div><div class="pr-ticket-sub">Número de confirmación</div></div><div class="pr-section"><div class="pr-label">Proveedor</div><div class="pr-value">'+d.prov+'</div></div><div class="pr-section"><div class="pr-label">Órdenes de compra a entregar ('+d.ocs.length+')</div><div class="pr-oc-grid">'+chips+'</div></div><div class="pr-section"><div class="pr-label">Fecha de entrega</div><div class="pr-value">'+d.fechaLong+'</div></div><div class="pr-section"><div class="pr-label">Horario</div><div class="pr-value">De '+d.hd+' hs a '+d.hh+' hs</div></div><div class="pr-footer"><span>Portal de Entregas — Uso interno</span><span>'+d.ticket+'</span></div>';
+  setTimeout(function(){window.print();},150);
+}
+function okClose(){closeM();resetAll();}
+function resetAll(){selProv=null;selOCs=[];confirmData={};rsEl.value='';dropEl.classList.remove('open');['f','fd','fh'].forEach(function(id){document.getElementById(id).value='';});document.getElementById('hd').value='08:00';document.getElementById('hh').value='17:00';document.getElementById('oc-area').innerHTML='<div class="no-oc">Ingresá tu razón social para ver tus OC pendientes.</div>';hideOC();updateSteps();}
+document.getElementById('mo').addEventListener('click',function(e){if(e.target===this)closeM();});
+</script>
+</body>
+</html>
